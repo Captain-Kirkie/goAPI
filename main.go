@@ -3,13 +3,18 @@ package main
 // package import path is module path joined with subDirectory
 import (
 	"fmt"
-	album "qpi/web-service-gin/models"
 	"net/http"
-    "github.com/gin-gonic/gin"
-)
+	album "qpi/web-service-gin/models"
 
-const PORT = 8080;
-const HOSE = "localhost:";
+	"github.com/gin-gonic/gin"
+)
+/**
+	Server specs.
+*/
+const PORT = "8080";
+const HOST = "localhost";
+var serverEndpoint = fmt.Sprintf("%v:%v",HOST, PORT);
+
 var albumsArr = []album.Album{
 		{ ID: 1, Title : "To Late for Edielweiss", Artist: "Tallest", Price: 54.32},
 		{ ID: 2, Title : "Can't Wake Up", Artist: "Shakey Graves", Price: 100.12},
@@ -20,9 +25,8 @@ var albumsArr = []album.Album{
 func main() {
 	router := gin.Default();
 	router.GET("/albums", getAlbums);
-	router.Run("")
-
-	fmt.Println("server running at %v", PORT)
+	router.Run(serverEndpoint);
+	fmt.Println("server running at %v", serverEndpoint)
 }
 
 
