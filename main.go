@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	album "qpi/web-service-gin/models"
-
 	"github.com/gin-gonic/gin"
 )
 /**
@@ -24,12 +23,26 @@ var albumsArr = []album.Album{
 
 func main() {
 	router := gin.Default();
-	router.GET("/albums", getAlbums);
+	router.GET("/albums", getAlbums); // define GET at /albums endpoint
+	router.POST("/albums", postAlbum); // POST
 	router.Run(serverEndpoint);
 	fmt.Println("server running at %v", serverEndpoint)
 }
 
 
 func getAlbums (c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, albumsArr)
+	c.IndentedJSON(http.StatusOK, albumsArr); // serialize the struct into json
+}
+
+func postAlbum (c *gin.Context) {
+	var newAlbum album.Album
+	fmt.Println("Album before %v", newAlbum);
+	if err := c.BindJSON(&newAlbum); err != nil {
+		fmt.Println("Error with %v", newAlbum);
+		return;
+	}
+	fmt.Println("Album after binding %v", newAlbum);
+
+	albumsArr = append(albumsArr, newAlbum);
+	c.IndentedJSON(http.StatusCreated, newAlbum); // return status created
 }
